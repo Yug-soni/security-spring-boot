@@ -1,6 +1,7 @@
 package com.yug.app.security;
 
 import lombok.AllArgsConstructor;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+import static com.yug.app.security.ApplicationUserRole.*;
 
 @Configuration
 @EnableWebSecurity
@@ -37,10 +40,17 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails yug =  User.builder()
                 .username("yug")
                 .password(passwordEncoder.encode(charSequence))
-                .roles("STUDENT") // this stored as ROLE_STUDENT
+                .roles(STUDENT.name()) // this stored as ROLE_STUDENT
                 .build();
+
+        UserDetails admin = User.builder()
+                .username("admin")
+                .password(passwordEncoder.encode(charSequence))
+                .roles(ADMIN.name())
+                .build();
+
         return new InMemoryUserDetailsManager(
-                yug
+                yug, admin
         );
     }
 
