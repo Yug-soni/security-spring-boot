@@ -37,21 +37,28 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     protected UserDetailsService userDetailsService() {
 
         CharSequence charSequence = "p";
-        UserDetails yug =  User.builder()
+        UserDetails yug_student = User.builder()
                 .username("yug")
                 .password(passwordEncoder.encode(charSequence))
-                .roles(STUDENT.name()) // this stored as ROLE_STUDENT
+                .roles(STUDENT.name()) // ROLE_STUDENT
                 .build();
 
-        UserDetails admin = User.builder()
+        UserDetails yug_admin = User.builder()
                 .username("admin")
                 .password(passwordEncoder.encode(charSequence))
-                .roles(ADMIN.name())
+                .roles(ADMIN.name()) // ROLE_ADMIN
+                .build();
+
+        UserDetails yug_trainee = User.builder()
+                .username("trainee")
+                .password(passwordEncoder.encode(charSequence))
+                .roles(ADMIN_TRAINEE.name()) // ROLE_ADMIN_TRAINEE
                 .build();
 
         return new InMemoryUserDetailsManager(
-                yug,
-                admin
+                yug_student,
+                yug_admin,
+                yug_trainee
         );
     }
 

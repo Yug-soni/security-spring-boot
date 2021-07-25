@@ -24,7 +24,7 @@ public class StudentController {
                 stream()
                 .filter(student -> studentId.equals(student.getStudentId()))
                 .findFirst()
-                .orElseThrow(() -> new IllegalMonitorStateException("Student "+studentId+" does not exist."));
+                .orElseThrow(() -> new IllegalMonitorStateException("Student " + studentId + " does not exist."));
     }
 
 
