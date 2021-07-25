@@ -26,6 +26,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
+                .antMatchers("/api/**").hasRole(STUDENT.name())
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();
@@ -49,7 +50,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .build();
 
         return new InMemoryUserDetailsManager(
-                yug, admin
+                yug,
+                admin
         );
     }
 
