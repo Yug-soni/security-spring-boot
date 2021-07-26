@@ -2,8 +2,9 @@ package com.yug.app.student;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
-@Getter
+@Getter @ToString
 @AllArgsConstructor
 public class Student {
 
