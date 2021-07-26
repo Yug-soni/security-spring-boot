@@ -41,8 +41,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    @Bean
-    protected UserDetailsService userDetailsService() {
+    @Bean protected UserDetailsService userDetailsService() {
 
         CharSequence charSequence = "p";
         UserDetails yug_student = User.builder()
