@@ -3,6 +3,7 @@ package com.yug.app.security;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -16,6 +17,7 @@ import static com.yug.app.security.ApplicationUserRole.*;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @AllArgsConstructor
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -28,6 +30,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name())
+//                .antMatchers(HttpMethod.DELETE,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
+//                .antMatchers(HttpMethod.POST,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
+//                .antMatchers(HttpMethod.PUT,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
+//                .antMatchers(HttpMethod.GET,"/management/api/**").hasAnyRole(ADMIN.name(), ADMIN_TRAINEE.name())
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();
@@ -41,19 +47,22 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails yug_student = User.builder()
                 .username("yug")
                 .password(passwordEncoder.encode(charSequence))
-                .roles(STUDENT.name()) // ROLE_STUDENT
+//                .roles(STUDENT.name()) // ROLE_STUDENT
+                .authorities(STUDENT.geSimpleGrantedAuthorities())
                 .build();
 
         UserDetails yug_admin = User.builder()
                 .username("admin")
                 .password(passwordEncoder.encode(charSequence))
-                .roles(ADMIN.name()) // ROLE_ADMIN
+//                .roles(ADMIN.name()) // ROLE_ADMIN
+                .authorities((ADMIN.geSimpleGrantedAuthorities()))
                 .build();
 
         UserDetails yug_trainee = User.builder()
                 .username("trainee")
                 .password(passwordEncoder.encode(charSequence))
-                .roles(ADMIN_TRAINEE.name()) // ROLE_ADMIN_TRAINEE
+//                .roles(ADMIN_TRAINEE.name()) // ROLE_ADMIN_TRAINEE
+                .authorities(ADMIN_TRAINEE.geSimpleGrantedAuthorities())
                 .build();
 
         return new InMemoryUserDetailsManager(

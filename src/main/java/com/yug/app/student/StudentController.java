@@ -27,5 +27,4 @@ public class StudentController {
                 .orElseThrow(() -> new IllegalMonitorStateException("Student " + studentId + " does not exist."));
     }
 
-
 }
