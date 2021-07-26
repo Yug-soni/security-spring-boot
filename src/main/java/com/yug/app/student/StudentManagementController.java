@@ -39,6 +39,6 @@ public class StudentManagementController {
     @PreAuthorize("hasAuthority('student:write')")
     public void updateStudent(@RequestBody Student student,@PathVariable("studentId") Integer studentId) {
         String format = "%s %s";
-        System.out.printf((format) + "%n", student, studentId);;
+        System.out.printf((format) + "%n", student, studentId);
     }
 }
