@@ -6,13 +6,14 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Set;
 
 @AllArgsConstructor
 public class ApplicationUser implements UserDetails {
 
-    private final Collection<? extends GrantedAuthority> grantedAuthorities;
-    private  final String password;
+    private final Set<? extends GrantedAuthority> grantedAuthorities;
     private  final String username;
+    private  final String password;
     private  final boolean isAccountNonExpired;
     private  final boolean isAccountNonLocked;
     private  final boolean isCredentialsNonExpired;
