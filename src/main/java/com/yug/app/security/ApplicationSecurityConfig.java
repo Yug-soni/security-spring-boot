@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.concurrent.TimeUnit;
 
@@ -40,8 +41,16 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/courses", true)
                 .and()
                 .rememberMe() // default to the 2 weeks.
-                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21l))
-                    .key("hereWeHaveToPutTheKeyWhichIsUsedToHashTheValuesUsingMD5HashingAlgorithm");
+                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21L))
+                    .key("hereWeHaveToPutTheKeyWhichIsUsedToHashTheValuesUsingMD5HashingAlgorithm")
+                .and()
+                .logout()
+                    .logoutUrl("/logout")
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+                    .clearAuthentication(true)
+                    .invalidateHttpSession(true)
+                    .deleteCookies("JSESSIONID", "remember-me", "XSRF-TOKEN")
+                    .logoutSuccessUrl("/login");
     }
 
     @Override
