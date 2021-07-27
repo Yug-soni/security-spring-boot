@@ -1,8 +1,11 @@
 package com.yug.app.security;
 
+import com.yug.app.auth.ApplicationUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -25,6 +28,7 @@ import static com.yug.app.security.ApplicationUserRole.*;
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
+    private final ApplicationUserService applicationUserService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -57,36 +61,17 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(this.daoAuthenticationProvider());
+    }
+
     @Bean
-    protected UserDetailsService userDetailsService() {
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(this.passwordEncoder);
+        provider.setUserDetailsService(this.applicationUserService);
 
-        CharSequence charSequence = "p";
-        UserDetails yug_student = User.builder()
-                .username("yug")
-                .password(passwordEncoder.encode(charSequence))
-//                .roles(STUDENT.name()) // ROLE_STUDENT
-                .authorities(STUDENT.getGrantedAuthorities())
-                .build();
-
-        UserDetails yug_admin = User.builder()
-                .username("admin")
-                .password(passwordEncoder.encode(charSequence))
-//                .roles(ADMIN.name()) // ROLE_ADMIN
-                .authorities((ADMIN.getGrantedAuthorities()))
-                .build();
-
-        UserDetails yug_trainee = User.builder()
-                .username("trainee")
-                .password(passwordEncoder.encode(charSequence))
-//                .roles(ADMIN_TRAINEE.name()) // ROLE_ADMIN_TRAINEE
-                .authorities(ADMIN_TRAINEE.getGrantedAuthorities())
-                .build();
-
-        return new InMemoryUserDetailsManager(
-                yug_student,
-                yug_admin,
-                yug_trainee
-        );
+        return provider;
     }
 
 }
