@@ -26,7 +26,8 @@ public class FakeApplicationUserDaoService implements ApplicationUserDao {
 
     public List<ApplicationUser> getApplicationUsers() {
         CharSequence password = "p";
-        List<ApplicationUser> list = Lists.newArrayList(
+
+        return Lists.newArrayList(
                 new ApplicationUser(
                         STUDENT.getGrantedAuthorities(),
                         "yug",
@@ -55,7 +56,5 @@ public class FakeApplicationUserDaoService implements ApplicationUserDao {
                         true
                 )
         );
-
-        return list;
     }
 }
